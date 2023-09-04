@@ -21,12 +21,15 @@ class DataManager:
         return top_des_data
 
 
+
+#fills google sheets with top 10 destinations
     def fill_iata(top_des_data):
 
         for i in range(len(top_des_data)):
             cur_city = top_des_data[i]['name']
             cur_IATA = top_des_data[i]['code']
             requests.put(url = sheety_url+f'/{i+2}', json = {'price':{'city':cur_city, 'iataCode':cur_IATA}})
+        
         # response = requests.get(url=sheety_url)
 
         # #LIST of dictionaries for data in google sheets
