@@ -13,6 +13,8 @@ class DataManager:
 
     #starting location user input: can be name of city or airport
     #inputs top 10 destination names and IATA (Tequila) into google sheet (Sheety)
+
+    #returns top 10 des from city json
     def starting_loc(user_city):
         city_id = requests.get(url = loc_query_url, params = {'term':user_city}, headers=API_KEY_TEQUILA)
         city_id_data = city_id.json()['locations']
@@ -22,14 +24,21 @@ class DataManager:
 
 
 
-    #fills google sheets with top 10 destinations
-    def fill_iata(top_des_data):
+    #fills google sheets with top 10 destinations and lowest price
+    def fill_sheet(top_des_data, ori_city, date=str):
 
         for i in range(len(top_des_data)):
             cur_city = top_des_data[i]['name']
             cur_IATA = top_des_data[i]['code']
-            requests.put(url = sheety_url+f'/{i+2}', json = {'price':{'city':cur_city, 'iataCode':cur_IATA}})
-        
+
+            flight_data_raw=requests.get(url = tequila_url+'search', params={'fly_from':ori_city, 'fly_to':cur_IATA, 'date_from':date, 'date_to':date, 'adults':1, 'curr':'CAD', 'vehicle_type':'aircraft'}, headers=API_KEY_TEQUILA)
+            flight_data = flight_data_raw.json()['data']
+
+            requests.put(url = sheety_url+f'/{i+2}', json = {'price':{'city':cur_city, 'iataCode':cur_IATA, 'lowestPrice':flight_data[0]['price']}})
+
+    
+    #filling price and date of trips
+
     
         # response = requests.get(url=sheety_url)
 
