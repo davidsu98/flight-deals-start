@@ -7,3 +7,5 @@ Future changes:
 - pre-selected destinations ---> most popular destinations as grossed on Tequila
 - altering prices (avg low price of past year)
 - integrate multi-city
+
+- Understand an itenirary as an input and provide flights. multi-city mode. Whispers API
